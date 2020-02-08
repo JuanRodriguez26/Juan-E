@@ -1,0 +1,28 @@
+def fibo(n):
+    cont = 1
+    num1 = 1
+    num2 = 0
+    aux = 0
+    while cont < n:
+        num1 += num2
+        aux = num1
+        num2 = aux
+        cont += 1
+        
+    print("el ",n,"-esimo numero factorial es: ", num1)
+
+def fibo_rec(n, contador, num1, num2):
+    if contador < n:
+        temp = num1 
+        num1  += num2 
+        num2  = temp
+        contador  += 1
+        fibo_rec(n, contador, num1, num2)
+    else:
+        print("el ",n,"-esimo numero factorial es: ", num1)
+        
+print(fibo(6))
+contador = 1
+num1 = 1
+num2 = 0
+print(fibo_rec(6, contador, num1, num2))
