@@ -1,0 +1,146 @@
+					        	Taller 1 
+
+class Item():
+  def __init__(self, obj):
+    self.item = obj
+    self.nxt = None
+
+class ListDynamic(object):
+
+  def __init__(self):
+    self.head = None
+    self.size = 0  
+
+  def add_element(self, ele):
+    new_item = Item(ele)
+    if self.size == 0:
+      self.head = new_item
+    else:
+      elem = self.head
+      while(elem.nxt != None):
+        elem = elem.nxt
+      elem.nxt = new_item
+    self.size += 1
+
+  def remove_tail(self):
+    aux_borrar = Item
+    anterior = Item
+    aux_borrar = self.head
+
+    while(aux_borrar != None):
+      anterior = aux_borrar
+      aux_borrar = aux_borrar.nxt
+
+      if aux_borrar.nxt == None:
+        anterior.nxt = aux_borrar.nxt
+        self.size -= 1
+        del aux_borrar
+
+        print('El ultimo elemento ha sido elimiado correctamente')
+    
+  def remove_element(self, val):
+    aux_borrar = Item
+    anterior = Item
+    aux_borrar = self.head
+    anterior.nxt = None
+
+    while((aux_borrar != None) and (aux_borrar.item != val)):
+      anterior = aux_borrar
+      aux_borrar = aux_borrar.nxt
+
+    if aux_borrar == None:
+      print('El elemento no existe.')
+    elif anterior.nxt == None:
+      self.head = self.head.nxt
+      self.size -= 1
+      del aux_borrar
+
+      print('El elemento ha sido borrado correctamente')
+    else:    
+      anterior.nxt = aux_borrar.nxt
+      self.size -= 1
+      del aux_borrar
+
+      print('El elemento ha sido borrado correctamente')
+
+  def print_list(self):
+    item = self.head
+    for i in range(self.size):
+
+      while(item != None):
+        print(item.item)
+        item =  item.nxt  
+        
+---------------------------------------------------------------------------------------------
+                taller 2
+                
+class Item():
+  def __init__(self, obj):
+    self.item = obj
+    self.nxt = None
+
+class ListDynamic(object):
+
+  def __init__(self):
+    self.head = None
+    self.size = 0  
+
+  def add_element(self, ele):
+    new_item = Item(ele)
+    anterior = Item
+    if self.size == 0:
+      self.head = new_item
+      self.head.nxt = self.head
+    else:
+      elem = self.head.nxt
+      if self.size == 1:
+        self.head.nxt = new_item
+        new_item.nxt = self.head
+      else:
+        while (elem != self.head):
+          anterior = elem
+          elem = elem.nxt
+          if elem == self.head:
+            break
+        anterior.nxt = new_item
+        new_item.nxt = self.head
+    self.size += 1
+    
+  def remove_element(self, val):
+    bandera = False
+    aux_borrar = Item
+    anterior = Item
+    aux_borrar = self.head.nxt
+    anterior.nxt = None
+
+    while((aux_borrar != self.head) and (aux_borrar.item != val)):
+      anterior = aux_borrar
+      aux_borrar = aux_borrar.nxt
+      bandera = True
+
+    if (aux_borrar == self.head) and (bandera == True) and (aux_borrar.item == val):
+      self.head = self.head.nxt
+      anterior.nxt = self.head
+      self.size -= 1
+      del aux_borrar
+
+      print('El elemento ha sido borrado correctamente')
+    elif aux_borrar == self.head and bandera == True:
+      
+      print('El elemento no existe.')
+
+    else:    
+      anterior.nxt = aux_borrar.nxt
+      self.size -= 1
+      del aux_borrar
+
+      print('El elemento ha sido borrado correctamente')
+
+  def print_list(self):
+    item = self.head
+    for i in range(self.size):
+      if self.head == self.head.nxt:
+        print(self.head.item)
+      else:
+        print(item.item)
+        item =  item.nxt  
