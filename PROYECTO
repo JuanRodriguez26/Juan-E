@@ -1,0 +1,123 @@
+from xml.dom import minidom
+from geopy.distance import geodesic
+
+docXML = minidom.parse("TRABAJO_ESTRUCTURAS.XML")
+
+cont = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+
+class Item():
+    def __init__(self, nombre, latitud, longitud, tipo):
+        self.estacion = [nombre, latitud, longitud, tipo]
+        self.nxt = None
+
+
+class ListDynamic(object):
+
+    def __init__(self):
+        self.head = None
+        self.size = 0
+
+    def add_element(self):
+        for k in cont:
+            nombre = docXML.getElementsByTagName("NOMBRE")[k]
+            latitud = docXML.getElementsByTagName("LATITUD")[k]
+            longitud = docXML.getElementsByTagName("LONGITUD")[k]
+            tipo = docXML.getElementsByTagName("TIPO")[k]
+            new_item = Item(nombre.firstChild.data, latitud.firstChild.data, longitud.firstChild.data, tipo.firstChild.data)
+            #print(f"El nombre es: {nombre.firstChild.data}")
+            if self.size == 0:
+                self.head = new_item
+            else:
+                elem = self.head
+                while (elem.nxt != None):
+                    elem = elem.nxt
+                elem.nxt = new_item
+            self.size += 1
+
+    def distance(self, inicio, fin):
+        actual = Item
+        siguiente = Item
+        actual = self.head
+        siguiente = actual.nxt
+        inicio -= 1
+        fin -= 1
+        distancia = 0
+        bandera = False
+
+        for k in cont:
+            if (inicio == k and bandera == False) or (fin == k and bandera == False):
+                bandera = True
+                if inicio < fin:
+                    while (inicio != fin):
+                        estacion1 = (actual.estacion[1], actual.estacion[2])
+                        estacion2 = (siguiente.estacion[1], siguiente.estacion[2])
+
+                        suma = (geodesic(estacion1, estacion2).kilometers)
+                        distancia += suma
+
+                        inicio += 1
+                        actual = actual.nxt
+                        siguiente = actual.nxt
+                else:
+                    while (fin != inicio):
+                        estacion1 = (actual.estacion[1], actual.estacion[2])
+                        estacion2 = (siguiente.estacion[1], siguiente.estacion[2])
+
+                        suma = (geodesic(estacion1, estacion2).kilometers)
+                        distancia += suma
+
+                        fin += 1
+                        actual = actual.nxt
+                        siguiente = actual.nxt
+
+        print(f'La distancia total entre las dos estaciones es de: {distancia} kilometros')
+
+
+    def remove_element(self, val):
+        aux_borrar = Item
+        anterior = Item
+        aux_borrar = self.head
+        anterior.nxt = None
+
+        while ((aux_borrar != None) and (aux_borrar.item != val)):
+            anterior = aux_borrar
+            aux_borrar = aux_borrar.nxt
+
+        if aux_borrar == None:
+            print('El elemento no existe.')
+        elif anterior.nxt == None:
+            self.head = self.head.nxt
+            self.size -= 1
+            del aux_borrar
+
+            print('El elemento ha sido borrado correctamente')
+        else:
+            anterior.nxt = aux_borrar.nxt
+            self.size -= 1
+            del aux_borrar
+
+            print('El elemento ha sido borrado correctamente')
+
+    def print_list(self):
+        j = 1
+        contador = [0,3]
+        item = self.head
+        for i in range(self.size):
+
+            while (item != None):
+                for i in contador:
+                    if i == 0:
+                        print(f'{j}. {item.estacion[i]}')
+                    else:
+                        print(f'\tTIPO: {item.estacion[i]}')
+                item = item.nxt
+                j += 1
+
+lista = ListDynamic()
+
+lista.add_element()
+lista.print_list()
+inicio = int(input('Digite el numero de una estacion: '))
+fin = int(input('Digite el numero de una estacion: '))
+
+lista.distance(inicio, fin)
